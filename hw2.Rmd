@@ -1,5 +1,5 @@
 ---
-title: "Social Data Science Homework 2: Collecting digital trace data"
+title: "Computational Social Science Homework 2: Collecting digital trace data"
 author: "Your name here"
 output:
   html_document: default
