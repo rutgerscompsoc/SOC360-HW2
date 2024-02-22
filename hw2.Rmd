@@ -27,29 +27,14 @@ This assignment is designed to build your familiarity with API usage and web-scr
 
 **Please begin by adding your name to the top of the document on line 3.**
 
-### Requirements
-You should be viewing this document in RStudio. If you have not done so already, make sure to install the required packages (see initial chunk). You can do this by clicking the ``Install`` button in the Packages tab in the lower-right corner of RStudio and following the directions on the installation menu. You can also install packages by entering ``install.packages(x)`` into the R Console, where ``x`` is the name of the package.
-
-### Submitting the homework
-Once you have finished the assignment please complete the following steps to submit it:
-
-1. Click on the ``Knit`` menu at the top of the screen and select ``Knit to HTML``. This will execute the all of the code and render the RMarkdown document in HTML. Verify that this document contains all of your answers and that none of the chunks produce error messages.
-2. Add this document *and* the HTML file to Github. Use ``Homework submitted`` as your main commit message.
-3. Push the commit to Github.
-4. Visit the Github repository in your browser and verify that the final version of both files has been correctly uploaded.
-
 **Note carefully** This assignment will involve using an API and web scraping. When you ``Knit`` your document it will re-run all of your code to produce the HTML version. It is possible this may produce an error if you have somehow exceeded your API rate limit (although this is unlikely). I recommend waiting for half an hour before retrying if you run into a rate-limit error.
 
 # **Part I: The Spotify API**
  
-### Set-up
-You will need to have a Spotify account and an active Spotify API key for this part of the homework. You can use the same credentials you created for the in-class assignment. If you do not have credentials, please do the following:
+## Set-up
+You will need to have a Spotify account and an active Spotify API key for this part of the homework. You can use the same credentials you created for the in-class assignment. Simply replace the template here with the version from class. 
 
-  - Visit https://developer.spotify.com/dashboard/login and log in using your Spotify account (you do not need a paid account)
-  - Click the `CREATE AN APP` button
-  - Provide a name and description (e.g. Name: Social Data Science homework, Description: This app is used for a homework assignment focused on using APIs in R) and agree to the terms of service, then click `CREATE`
-  - Copy the client ID and paste it into the `id` field of `creds.json`
-  - Click `SHOW CLIENT SECRET` then copy the secret and paste it into the `id` field of `creds.json`
+If you do not have credentials set up, follow the instructions from class and add your credentials to the `creds.json` file here.
   
 When you have completed this process your `creds.json` should look something like this:
 
@@ -65,7 +50,7 @@ When you have completed this process your `creds.json` should look something lik
 We will be using the `spotifyr` package to access the Spotify API.
 
 Start by running this chunk to load required packages. You may need to install `reshape2`.
-```{r, echo=TRUE, tidy=TRUE, mysize=TRUE, size='\\footnotesize'}
+```{r packages}
 library(spotifyr)
 library(tidyverse)
 library(jsonlite)
@@ -77,8 +62,8 @@ library(magrittr)
 library(reshape2)
 ```
 
-Q1. Please run the following chunk to use your credentials to get an access token. Then answer the question below.
-```{r, echo=TRUE, tidy=TRUE, mysize=TRUE, size='\\footnotesize'}
+Q1. Please run the following chunk to use your credentials to get an access token. If it does not work, check the `creds.json` file to verify that your credentials have been stored. Then answer the question below.
+```{r creds}
 creds <- read_json("creds.json") # read creds
 
 Sys.setenv(SPOTIFY_CLIENT_ID = creds$id) # set creds
@@ -95,17 +80,17 @@ Q2. Let's use the API to collect some data. Use the `get_featured_playlists` end
 a. How many playlists are returned?
 b. What is the mean number of tracks in these playlists?
 
-```{r q2, echo=TRUE, tidy=TRUE}
+```{r q2}
 playlists <- get_featured_playlists() # get playlists
   
-# a (your answer for Q2a here)
+# a (Calculate your answer for Q2a here)
 
 # b
 
 ```
 
 Q3. `spotifyr` contains a function to extract information on the tracks in each playlist. You have been provided with code to iterate over all playlists in the object above. Identify the appropriate function and complete the code below. You can leave the limit parameter at its default value.
-```{r q3, echo=TRUE, tidy=TRUE}
+```{r q3}
 tracks <- tibble()
 for (p in playlists$id) {
   t <- # Complete this line to get the tracks in each playlist, do not modify anything else
@@ -117,29 +102,41 @@ for (p in playlists$id) {
 Q4. Let's take a look at the data we just collected. Write code below to answer the following questions.
 
 a. Select the columns containing the `playlist_id`,  track name, duration in miliseconds, popularity, and whether or not the track is explicit. Print the first ten rows.
+```{r q4a}
+
+```
 
 b. Construct a table containing the `playlist_id` and the average length in *seconds* of each playlist. Print the first 5 rows.
+```{r q4b}
+
+```
 
 c. Calculate the total length of each playlist. Print the names and lengths of the top 5 playlists by length.
+```{r q4c}
 
-d. Calculate the proportion of explicit tracks in each playlist. Which playlist has the highest proportion of explicit tracks? Which has the lowest?
+```
+
+d. Calculate the proportion of explicit tracks in each playlist. Print the names of the playlists with the highest and lowest proportions.
+```{r q4d}
+
+```
 
 e. Compare the popularity of explicit and non-explicit songs. Which type has a higher popularity on average?
 
-```{r q4, echo=TRUE, tidy=TRUE}
-# a
-
-# b
-
-# c
-
-# d
-
-# e
+```{r q4e}
 
 ```
 
 Q5. Let's use the data in tracks to create a plot. Complete the code below to create a scatterplot. The y-axis should show the popularity and the x-axis should show the duration in seconds. Each point should be colored according to whether or not a song is explicit. As with some of the previous questions, remove tracks with zero popularity before plotting. 
+
+
+```{r q5}
+p <- ggplot( , # Add arguments here and in lines below
+       aes(x = , 
+           y = ,
+           color = )) + # add plot elements here
+p # run this line to print the plot
+```
 
 Finally, please provide written answers here to the following questions.
 
@@ -149,23 +146,9 @@ Answer:
 b. Do you notice any differences between explicit and non-explicit tracks?
 Answer:
 
-```{r q5, echo=TRUE, tidy=TRUE}
-p <- ggplot( , # Add arguments here and in lines below
-       aes(x = , 
-           y = ,
-           color = )) + # add plot elements here
-p # run this line to print the plot
-```
-
 Q6. Let's move on to something more interesting. Pick two artists and run the code below to get their audio features. Then run the ggplot line to create plot and answer the questions below.
 
-a. What does the plot show?
-Answer:
-
-b. Does this tell us anything interesting about the careers of the two artists?
-Answers:
-
-```{r q6, echo=TRUE, tidy=TRUE}
+```{r q6}
 a1 <- "" # Add name of artist 1 here
 a2 <- "" # Add name of artist 2 here
 af1 <- get_artist_audio_features(a1) %>% as_tibble()
@@ -180,41 +163,20 @@ ggplot(both %>% group_by(artist_name, album_release_year) %>%
   theme_minimal()
 ```
 
-Q7. Let's compare the audio features of each artist. I have provided you with code to transform the data and produce a heatmap. Please do the following:
-
-a. Modify the plot to change the angle of the x-axis labels so that they do not run into each other.
-
-b. Add an informative title.
-
-c. Explain why the `mutate_all(scale)` function is used (hint: you may want to look at the results without this line)
+a. What does the plot show?
 Answer:
 
-d. We have not covered the `melt` function in class, but it can be useful for transforming data. Explain what the function does and why it is used here. You may want to look at the documentation and examine the objects below and after this transformation.
-Answer:
+b. Does this tell us anything interesting about the careers of the two artists?
+Answers:
 
-e. What differences do you observe between the two artists? Do these differences make sense based on what you know about their music?
-Answer:
+Q7. Use a different function from `spotifyr` to collect a dataset of your choice. You may combine multiple functions as necessary. Use these data to compare one or more artists/albums/tracks, etc. Use `ggplot` to visualize the data, making the plot as clear and understandable as possible. Write a short paragraph to explain what you are comparing and what the plot shows.
 
-```{r q7, echo=TRUE, tidy=TRUE}
-# Do not modify this line
-features <- both %>% group_by(artist_name) %>% select(danceability, energy, key, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, tempo) %>% mutate_all(scale) %>%
-  summarize_all(mean) 
+```{r q7}
 
-melted <- features %>% melt() # Do not modify this line
 
-ggplot(melted, aes(x = variable,
-           y = artist_name, 
-           fill = value)) + geom_tile() +
-  scale_fill_gradient2(low = "white", high= "blue") +
-  theme_minimal()
 ```
-Q8. This open-ended question is optional for extra credit. *This is not the end of the assignment, Part II is below*.
 
-Use a different function from `spotifyr` to collect a dataset of your choice. You may combine multiple functions as necessary. Use these data to compare one or more artists/albums/tracks, etc. Use `ggplot` to visualize the results. Write a short paragraph to explain what you are comparing and what the plot shows.
-
-```{r q8, echo=TRUE, tidy=TRUE}
-### Optional extra credit
-```
+Findings:
 
 # **Part II: Web-scraping**
 
@@ -228,68 +190,55 @@ Before starting this section, I recommend you get some more familiarity with HTM
   - Interactive CSS tutorial/game https://flukeout.github.io/
   - CSS selector gadget https://selectorgadget.com/
 
-Q9. For each of the following HTML tags, write a one sentence description of what they do (e.g. `<head> ... </head>`: This defines the header of a web page):
+Q8. For each of the following HTML tags, write a one sentence description of what they do (e.g. `<head> ... </head>`: This defines the header of a web page):
     
     a. `<title> ... </title>`:
     b. `<p> ... </p>`:
     c. `<img src="...">`:
     d. `<a href="...">...</a>`
 
-Q10. In this example will be scraping content from Wikipedia. 
+Q9. In the chunk below, `rvest` is used to read a Wikipedia page for Rutgers. I recommend you open this page in your browser and take a look at the content before proceeding.
 
-In the chunk below, `rvest` is used to read a Wikipedia page on various historical revolutions, rebellions, insurrections and uprisings. I recommend you open this page in your browser and take a look at the content before proceeding.
+Complete the code below to extract the table titled "Fall First-Time Freshman Statistics". You will need to provide the relevant CSS selector then add another command to parse the table. Hint: `rvest` includes a function specifically designed for extracting tables from HTML.
 
-Complete the code below to extract the two tables from the page and store them as separate objects. Note that there is a specific function in `rvest` which can help you to process the tables. I have provided the relevant CSS selector for the table. Hint: `rverst` includes a function specifically designed for extracting tables from HTML.
+Once you have the object, print the number of admitted students in 2021. Hint: Make sure to verify the class of `t` and inspect its contents.
 
-```{r q10, echo=TRUE, tidy=TRUE}
-### Your code here
-wiki <- read_html("https://en.wikipedia.org/wiki/List_of_revolutions_and_rebellions")
+```{r q9}
+wiki <- read_html("https://en.wikipedia.org/wiki/Rutgers_University")
 
-t <- wiki %>% html_nodes("table.wikitable") %>% ### Complete the pipe
+t <- wiki %>% html_nodes("") %>% # Complete the pipe to extract the table
 
-class(t) # It will help to know what class t is
-
-BC <- # Extract table for BC from results and convert to tibble
-AD <- # Extract table for AD 1-999 from results and convert to tibble
-  
-print(dim(BC)) # Do not modify these lines
-print(dim(AD))
+# Use `t` to print number of admits in 2021
+    
 ```
 
-Q11. We can also extract other finds of elements from the HTML. Add the correct content to  retrieve the URL for the image of the storming of the Bastille. You will need to find the appropriate selector to pass to `html_nodes` and then the correct HTML attribute to select in `html_attr`. You do not need to add any additional functions to the pipe.
+Q10. We can also extract other finds of elements from the HTML. Complete the arguments to retrieve the URL for the image of the Rutgers logo (the one at the bottom of the info panel that includes the text "The State University of New Jersey"). You will need to find the appropriate selector to pass to `html_nodes` and then the correct HTML attribute to select in `html_attr`. You do not need to add any additional functions to the pipe. 
 
-```{r q11, echo=TRUE, tidy=TRUE}
+Note that the URL returned will be missing "https:" at the front so it will not work in your browser unless you add this.
+
+```{r q11, tidy=F}
 img.url <- wiki %>% 
-  html_nodes() %>% # Add the relevant CSS selector
-  html_attr() # Add the relevant HTML attribute name
+  html_nodes('') %>% # Add the relevant selector and attribute
+  html_attr('') %>% pluck(2) # Do not modify `pluck(2)`
+print(img.url)
 ```
 
 When you render this document to HTML, the HTML snippet below will then use the `img.url` variable as the image source and will display the image in the output file.
 
 <center><img src="`r img.url`"></center>
 
-Q12. You should have noticed that all events after 1000 AD are listed as bullet points, rather than in tabular form. The HTML structure of these is called an *unordered list*. 
+# End of assignment 
+You have reached the end of the assignment. Please read the submission instructions below.
 
-a. Complete the first line of the chunk below to select all nodes of this type.
+## AI use
+Please document any ways that you used ChatGPT or similar tools to help with this assignment:
 
-If you inspect this object you should see that you have a character vector where each element is a string representing the contents of a bullet point. However, if you look at the tail of the vector you will see that there is also some other "junk" we are not interested in. Fortunately, it appears that most of the relevant elements contain a numeric year.
+# Submission instructions
+Once you have finished the assignment, please complete the following steps to submit it:
 
-b. Complete the regular expression in `str_extract` to detect whether there is a numeric year (e.g. 1848, 1968, 2011) in each element. Note: You do not need to detect all years, since some rows may have multiple years (e.g. 1501-1504), any reference is fine. You may want to look up the `strtoi` function I have provided to see how it works.
-
-c. Combine `bullets` and `years` into a two column tibble called `events` then drop any rows where no valid year was detected. 
-
-```{r q12, echo=TRUE, tidy=TRUE}
-# a
-bullets <- wiki %>% html_nodes() %>% html_text()
-
-# b
-years <- bullets %>% str_extract() %>% strtoi()
-
-# c 
-events <- 
-```
-
-Fortunately for those of you interested in Wikipedia, there is a well-developed API and associated R packages (`WikipediaR` seems to be the most popular) so you can collect these data without web-scraping.
-
-# End
-Follow the submission instructions at the beginning of this document. The procedure is the same as for homework 1, but read the note on line 48 carefully.
+1. Click on the arrow next to ``Knit`` menu at the top of the screen and select ``Knit to HTML``. Assuming there are no errors in your code, this will render the RMarkdown document in HTML. Verify that this document contains all of your answers.
+2. When you are satisfied with the results, verify that the correct project is active then go to the top right Git panel in RStudio, check the boxes on the left next to `hw2.Rmd` and `hw2.html`. Do not add your credentials file!
+3. Click the `Commit` button. This will open up a new window.
+4. Write a message in the ``Commit message`` box then click `Commit`. If it is your final submission, the message should read "Homework submitted". Accept the pop-up that will appear and close the window.
+5. Finally, click the green arrow at the top of the Git tab to "push" your changes to Github.
+6. Visit your Github repository in your browser and verify that the final version of both files has been correctly uploaded.
